@@ -1,0 +1,7 @@
+/* Local integration styles. The reference design lives in reference/style.css. */
+html { background: #fff; }
+body { margin: 0; }
+.intro, .preloader { visibility: hidden; }
+.is-up .intro, .is-up .preloader { visibility: visible; }
+a:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+.boot-error { max-width: 40rem; margin: 3rem; font: 16px/1.5 Arial, sans-serif; }
