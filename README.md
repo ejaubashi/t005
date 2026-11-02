@@ -1,6 +1,6 @@
-# Grids — DES Season 03
+# SHIFT — Form, Space & Motion
 
-A local reproduction of [Grids S03 by Obys](https://grids03.obys.agency/), matching the supplied screen recordings. Includes the modular type preloader, contents, fixed title and animated sidebar, scroll-driven grid lessons, photography, image interaction effects, kinetic typography, credits, and trailer overlay.
+A modern visual identity applied to the [Grids S03 experience by Obys](https://grids03.obys.agency/). SHIFT uses Space Grotesk display typography, IBM Plex Mono labels, electric violet, acid lime, and a pale paper background. A new modular SHIFT wordmark runs through the preloader, sidebar, mobile fallback, and finale. The grid layouts, scroll choreography, photographs, and trailer remain from the supplied reference.
 
 The reference site's public browser runtime, styles, typography, and media are retained locally for fidelity. This is a runnable snapshot of the public experience, not the original unbundled development source. See [THIRD_PARTY.md](./THIRD_PARTY.md) for provenance.
 
@@ -34,6 +34,7 @@ The workflow in `.github/workflows/pages.yml` builds and deploys pushes to `main
 - `index.html`: initial document, local font preload, and reload position reset.
 - `src/main.js`: Vite entry and runtime initialization.
 - `src/style.css`: local integration and keyboard focus styles.
+- `scripts/brand-runtime.mjs`: checked build-time name and modular wordmark overrides; leaves the reference file intact.
 - `src/reference/runtime.js`: public reference runtime, including animation and rendering libraries.
 - `src/reference/style.css`: public reference styles.
 - `public/`: local photography, font, trailer, and icons.

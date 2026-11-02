@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite';
+import { applyIdentity } from './scripts/brand-runtime.mjs';
 
 export default defineConfig({
   base: process.env.PAGES_BASE_PATH || '/',
@@ -10,7 +11,7 @@ export default defineConfig({
         if (!id.endsWith('/src/reference/runtime.js')) return null;
         // Adapt public-media URLs without changing the audited reference snapshot.
         return {
-          code: code
+          code: applyIdentity(code)
             .replaceAll('`/pictures/', '`${import.meta.env.BASE_URL}pictures/')
             .replaceAll('`/video/', '`${import.meta.env.BASE_URL}video/'),
           map: null,

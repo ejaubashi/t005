@@ -1,7 +1,71 @@
-/* Local integration styles. The reference design lives in reference/style.css. */
-html { background: #fff; }
+@font-face {
+  font-family: 'Space Grotesk';
+  src: url('/fonts/space-grotesk-latin-400-normal.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'IBM Plex Mono';
+  src: url('/fonts/ibm-plex-mono-latin-400-normal.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+:root {
+  --color-bg: #f0f2ed;
+  --color-ink: #5145ff;
+  --color-ground: #d8ff3e;
+  --color-rule: #d6d8e0;
+  --color-text: #191b27;
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-label: 'IBM Plex Mono', monospace;
+}
+
+html, body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-display);
+}
 body { margin: 0; }
 .intro, .preloader { visibility: hidden; }
 .is-up .intro, .is-up .preloader { visibility: visible; }
-a:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
-.boot-error { max-width: 40rem; margin: 3rem; font: 16px/1.5 Arial, sans-serif; }
+
+.intro__title {
+  color: var(--color-ink);
+  mix-blend-mode: normal;
+  letter-spacing: -.075em;
+}
+
+.intro__series, .intro__about, .intro__hint,
+.grid-entry__n, .grid-entry__time, .intro__n, .intro__time,
+.story__num, .story__steps, .interlude__band span,
+.about__n, .about__rights, .about__credit, .stub__note,
+.trailer__cursor {
+  font-family: var(--font-label);
+  font-size: calc(10 * var(--s));
+  letter-spacing: -.035em;
+}
+
+.intro__series, .intro__about { color: var(--color-ink); }
+.intro__hint { text-transform: uppercase; letter-spacing: .08em; }
+.grid-entry__bar { background: var(--color-ink); }
+.grid-entry__picture { background: #e2e3ea; }
+.story__caption { letter-spacing: -.065em; }
+.about__line--quiet i { color: #73758a; }
+.about__rights { opacity: .75; }
+.about__link, .intro__link { text-underline-offset: 3px; }
+.intro__link:hover, .about__copy .about__link:hover { opacity: .65; }
+.stub__note {
+  color: var(--color-text);
+  mix-blend-mode: normal;
+  font-size: 11px;
+  line-height: 1.5;
+  max-width: 320px;
+}
+.trailer { background: #131126eF; }
+.trailer__cursor--white { color: var(--color-ground); }
+a:focus-visible { outline: 2px solid var(--color-ink); outline-offset: 5px; }
+::selection { color: #191b27; background: var(--color-ground); }

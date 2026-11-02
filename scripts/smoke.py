@@ -53,8 +53,18 @@ with sync_playwright() as playwright:
         timeout=45000,
     )
     assert page.locator(".intro__title").is_visible()
+    assert page.title() == "SHIFT — Form, Space & Motion"
+    assert page.locator(".intro__word").first.text_content() == "SHIFT"
+    assert page.locator(".intro__word").nth(1).text_content() == "001"
+    assert set(page.locator(".preloader__module").evaluate_all(
+        "nodes => nodes.map(node => node.dataset.letter)")) == set("SHIFT")
+    assert page.evaluate("document.fonts.check('16px \"Space Grotesk\"')")
+    assert page.evaluate("document.fonts.check('16px \"IBM Plex Mono\"')")
+    assert page.locator("body").evaluate("node => getComputedStyle(node).fontFamily").startswith('"Space Grotesk"')
+    assert page.locator(".intro__series").evaluate("node => getComputedStyle(node).fontFamily").startswith('"IBM Plex Mono"')
+    assert page.evaluate("getComputedStyle(document.documentElement).getPropertyValue('--color-ink').trim()") == '#5145ff'
     assert page.locator(".intro__entry").count() == 18
-    print("PASS: desktop intro, WebGL renderer, contents, and 18 local photographs")
+    print("PASS: SHIFT name and modular wordmark, local fonts, palette, WebGL, contents, and 18 photographs")
 
     # Exercise the real trailer button and video controls.
     trailer = page.locator("[data-trailer]")
