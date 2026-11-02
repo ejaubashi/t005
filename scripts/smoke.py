@@ -58,12 +58,28 @@ with sync_playwright() as playwright:
     assert page.locator(".intro__word").nth(1).text_content() == "001"
     assert set(page.locator(".preloader__module").evaluate_all(
         "nodes => nodes.map(node => node.dataset.letter)")) == set("SHIFT")
-    assert page.evaluate("document.fonts.check('16px \"Space Grotesk\"')")
-    assert page.evaluate("document.fonts.check('16px \"IBM Plex Mono\"')")
-    assert page.locator("body").evaluate("node => getComputedStyle(node).fontFamily").startswith('"Space Grotesk"')
-    assert page.locator(".intro__series").evaluate("node => getComputedStyle(node).fontFamily").startswith('"IBM Plex Mono"')
-    assert page.evaluate("getComputedStyle(document.documentElement).getPropertyValue('--color-ink').trim()") == '#5145ff'
+    assert page.evaluate("document.fonts.check('16px \"Sora\"')")
+    assert page.evaluate("document.fonts.check('16px \"Manrope\"')")
+    assert page.locator("body").evaluate("node => getComputedStyle(node).fontFamily").split(',')[0].strip(' \"') == 'Manrope'
+    assert page.locator(".intro__title").evaluate("node => getComputedStyle(node).fontFamily").startswith('Sora')
+    assert page.locator(".intro__series").evaluate("node => getComputedStyle(node).fontFamily").split(',')[0].strip(' \"') == 'Manrope'
+    assert page.evaluate("getComputedStyle(document.documentElement).getPropertyValue('--color-ink').trim()") == '#1d4ed8'
     assert page.locator(".intro__entry").count() == 18
+    dark_text = page.evaluate("""() => {
+        const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+        const failures = [];
+        while (walker.nextNode()) {
+            const node = walker.currentNode;
+            const element = node.parentElement;
+            if (!node.textContent.trim() || element.closest('script, style, noscript')) continue;
+            const color = getComputedStyle(element).color;
+            const channels = color.match(/[\\d.]+/g).slice(0, 3).map(Number);
+            if (Math.max(...channels) < 80) failures.push({text: node.textContent.trim(), color});
+        }
+        return failures;
+    }""")
+    assert not dark_text, dark_text
+    print("PASS: no black or near-black interface text")
     print("PASS: SHIFT name and modular wordmark, local fonts, palette, WebGL, contents, and 18 photographs")
 
     # Exercise the real trailer button and video controls.

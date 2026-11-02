@@ -1,6 +1,6 @@
 # SHIFT — Form, Space & Motion
 
-A modern visual identity applied to the [Grids S03 experience by Obys](https://grids03.obys.agency/). SHIFT uses Space Grotesk display typography, IBM Plex Mono labels, electric violet, acid lime, and a pale paper background. A new modular SHIFT wordmark runs through the preloader, sidebar, mobile fallback, and finale. The grid layouts, scroll choreography, photographs, and trailer remain from the supplied reference.
+A modern visual identity applied to the [Grids S03 experience by Obys](https://grids03.obys.agency/). SHIFT uses Sora display typography, Manrope body text and labels, cobalt blue lettering, soft coral, and an ice-blue background. A new modular SHIFT wordmark runs through the preloader, sidebar, mobile fallback, and finale. The grid layouts, scroll choreography, photographs, and trailer remain from the supplied reference.
 
 The reference site's public browser runtime, styles, typography, and media are retained locally for fidelity. This is a runnable snapshot of the public experience, not the original unbundled development source. See [THIRD_PARTY.md](./THIRD_PARTY.md) for provenance.
 

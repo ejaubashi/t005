@@ -23,6 +23,6 @@ The local Vite wrapper, integration styles, documentation, and validation script
 
 ## SHIFT identity
 
-SHIFT adds original modular lettering, an electric violet and acid lime palette, and locally served Space Grotesk and IBM Plex Mono fonts. Runtime branding is applied by `scripts/brand-runtime.mjs` during Vite transformation; the downloaded reference file remains intact.
+SHIFT adds original modular lettering, a cobalt blue, soft coral, and ice-blue palette, and locally served Sora and Manrope fonts. Runtime branding is applied by `scripts/brand-runtime.mjs` during Vite transformation; the downloaded reference file remains intact.
 
-Space Grotesk and IBM Plex Mono were obtained from the corresponding Fontsource 5.3.0 packages. Both are distributed under the SIL Open Font License; license texts are retained next to the fonts in `public/fonts/`.
+Sora and Manrope were obtained from the corresponding Fontsource 5.3.0 packages. Both are distributed under the SIL Open Font License; license texts are retained next to the fonts in `public/fonts/`.
