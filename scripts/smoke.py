@@ -65,6 +65,7 @@ with sync_playwright() as playwright:
     assert page.locator(".intro__series").evaluate("node => getComputedStyle(node).fontFamily").split(',')[0].strip(' \"') == 'Manrope'
     assert page.evaluate("getComputedStyle(document.documentElement).getPropertyValue('--color-ink').trim()") == '#1d4ed8'
     assert page.locator(".intro__entry").count() == 18
+    page.locator('.shift-navigation').wait_for(state='visible')
     dark_text = page.evaluate("""() => {
         const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
         const failures = [];
@@ -81,6 +82,32 @@ with sync_playwright() as playwright:
     assert not dark_text, dark_text
     print("PASS: no black or near-black interface text")
     print("PASS: SHIFT name and modular wordmark, local fonts, palette, WebGL, contents, and 18 photographs")
+    page.locator('.shift-navigation').wait_for(state='visible')
+    page.keyboard.press('k')
+    page.locator('.shift-index[open]').wait_for(state='visible')
+    page.locator('#shift-search').fill('tension')
+    assert page.locator('.shift-chapter-link').count() == 1
+    page.locator('#shift-search').fill('no-such-study')
+    assert page.locator('.shift-chapter-link').count() == 0
+    assert 'No studies found' in page.locator('.shift-result-count').inner_text()
+    page.locator('#shift-search').fill('tension')
+    page.locator('.shift-chapter-link').click()
+    page.wait_for_function("location.hash === '#chapter-07'")
+    assert abs(page.locator('#chapter-07').bounding_box()['y'] - 140) < 5
+    assert page.locator('#chapter-07').evaluate('e => e === document.activeElement')
+    assert page.locator('.shift-progress').evaluate('e => e.value > 0')
+    page.keyboard.press('g')
+    assert page.locator('.shift-grid-toggle').get_attribute('aria-pressed') == 'true'
+    assert page.locator('.shift-grid-overlay').is_visible()
+    page.keyboard.press('g')
+    assert page.locator('.shift-grid-overlay').is_hidden()
+    page.locator('.shift-top').click()
+    page.wait_for_function('scrollY === 0')
+    page.keyboard.press('k')
+    page.locator('#shift-search').fill('composition')
+    page.keyboard.press('Escape')
+    page.wait_for_function("!document.querySelector('.shift-index').open")
+    print('PASS: searchable index, empty search, chapter jump, focus, progress, grid shortcut, and back to top')
 
     # Exercise the real trailer button and video controls.
     trailer = page.locator("[data-trailer]")
@@ -93,6 +120,13 @@ with sync_playwright() as playwright:
     page.wait_for_function("!document.querySelector('.trailer__film').paused")
     page.keyboard.press("Escape")
     page.wait_for_function("document.querySelector('.trailer').hidden")
+    trailer.focus()
+    page.keyboard.press('Enter')
+    page.wait_for_function("!document.querySelector('.trailer').hidden")
+    assert page.locator('.shift-video-close').evaluate('e => e === document.activeElement')
+    page.locator('.shift-video-close').click()
+    page.wait_for_function("document.querySelector('.trailer').hidden")
+    assert trailer.evaluate('e => e === document.activeElement')
     print("PASS: local trailer playback, pause, resume, and Escape to close")
 
     # Wheel input must progress through the pinned grid demonstration.
@@ -114,16 +148,18 @@ with sync_playwright() as playwright:
     assert page.evaluate("document.documentElement.scrollWidth <= innerWidth")
     print("PASS: kinetic typography, finale, and no desktop horizontal overflow")
 
-    # Preserve the reference's responsive desktop notice at narrow viewports.
+    # Narrow viewports now receive a fully usable gallery instead of a notice.
     page.set_viewport_size({"width": 390, "height": 844})
-    page.wait_for_function("document.documentElement.classList.contains('is-stub')")
-    assert page.locator(".stub__note").is_visible()
-    assert "designed for desktop" in page.locator(".stub__note").inner_text()
-    assert page.locator(".stub__note a").count() == 2
+    page.locator('.gallery-chapters').wait_for(state='visible')
+    assert page.locator('.gallery-card').count() == 18
+    assert page.locator('.stub').count() == 0
     assert page.evaluate("document.documentElement.scrollWidth <= innerWidth")
+    page.screenshot(path='/tmp/shift-upgraded-mobile.png', full_page=False)
     page.set_viewport_size({"width": 1440, "height": 900})
-    page.wait_for_function("!document.documentElement.classList.contains('is-stub')")
-    print("PASS: desktop → mobile notice → desktop resizing")
+    page.locator('.intro__title').wait_for(state='visible', timeout=45000)
+    page.locator('.shift-navigation').wait_for(state='visible', timeout=45000)
+    assert page.locator('.intro__title').is_visible()
+    print("PASS: desktop → mobile gallery → desktop resizing")
     page.close()
 
     touch = browser.new_context(viewport={"width": 390, "height": 844},
@@ -131,11 +167,36 @@ with sync_playwright() as playwright:
     mobile = touch.new_page()
     monitor(mobile)
     mobile.goto(url, wait_until="networkidle")
-    mobile.wait_for_function("document.documentElement.classList.contains('is-stub')")
-    assert mobile.locator(".stub__note").is_visible()
-    assert mobile.locator(".stub__word i").count() > 0
-    print("PASS: fresh touch-device load and modular wordmark")
+    mobile.locator('.gallery-chapters').wait_for(state='visible')
+    assert mobile.locator('.gallery-card').count() == 18
+    assert mobile.locator('canvas').count() == 0
+    mobile.set_viewport_size({'width': 320, 'height': 720})
+    assert mobile.evaluate('document.documentElement.scrollWidth <= innerWidth')
+    mobile.set_viewport_size({'width': 390, 'height': 844})
+    mobile.locator('.shift-index-toggle').click()
+    mobile.locator('#shift-search').fill('homework')
+    mobile.locator('.shift-chapter-link').click()
+    assert mobile.locator('#chapter-17').evaluate('e => e === document.activeElement')
+    mobile.locator('.shift-top').click()
+    mobile.locator('.gallery-play').click()
+    mobile.wait_for_function("document.querySelector('.shift-player video').currentTime > 0")
+    mobile.get_by_role('button', name='Close trailer', exact=True).click()
+    mobile.wait_for_function("document.querySelector('.shift-player video').paused")
+    assert mobile.evaluate("document.documentElement.scrollWidth <= innerWidth")
+    print("PASS: touch gallery, search navigation, local trailer playback, and close")
     touch.close()
+    reduced = browser.new_context(viewport={'width': 1440, 'height': 900}, reduced_motion='reduce')
+    reader = reduced.new_page()
+    monitor(reader)
+    runtime_requests = []
+    reader.on('request', lambda request: runtime_requests.append(request.url) if '/runtime-' in request.url else None)
+    reader.goto(url, wait_until='networkidle')
+    reader.locator('.gallery-chapters').wait_for(state='visible')
+    assert reader.locator('.gallery-card').count() == 18
+    assert not runtime_requests
+    assert reader.locator('canvas').count() == 0
+    print('PASS: reduced-motion edition loads the gallery without the animation runtime')
+    reduced.close()
     browser.close()
 
 assert not errors, errors

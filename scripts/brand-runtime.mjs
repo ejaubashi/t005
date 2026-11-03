@@ -30,5 +30,5 @@ export function applyIdentity(source) {
     }
     source = source.replaceAll(from, to);
   }
-  return source;
+  return source + '\nexport function jumpTo(y) { if (mc.lenis) mc.lenis.scrollTo(y, { immediate: true, force: true }); else window.scrollTo(0, y); }\n';
 }
