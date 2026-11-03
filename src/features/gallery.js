@@ -10,6 +10,7 @@ export function mountGallery() {
       <p class="gallery-kicker">Independent design study <span>Edition 001</span></p>
       <h1 id="gallery-title">SHIFT<span aria-hidden="true">${arrow}</span></h1>
       <p class="gallery-deck">A different way<br>to see the same world.</p>
+      <button class="gallery-lab-entry" data-open-lab>Enter the playground ${arrow}</button>
       <div class="gallery-intro-foot"><span>18 studies in composition</span><a href="#chapter-00">Start exploring ↓</a></div>
     </section>
     <section class="gallery-chapters" aria-label="Chapter gallery">${chapters.map(chapter => `

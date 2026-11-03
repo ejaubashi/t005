@@ -1,4 +1,5 @@
 import { chapters } from './chapters.js';
+import { mountLab } from './lab.js';
 
 export function mountNavigation({ scrollToChapter, targets }) {
   const shell = document.createElement('nav');
@@ -56,7 +57,7 @@ export function mountNavigation({ scrollToChapter, targets }) {
     dialog.querySelector('.shift-result-count').textContent = matches.length ? `${matches.length} ${matches.length === 1 ? 'study' : 'studies'}` : 'No studies found. Try another word.';
   };
   function openIndex() {
-    if (dialog.open || document.querySelector('.trailer:not([hidden]), .shift-player[open]')) return;
+    if (document.querySelector('dialog[open], .trailer:not([hidden])')) return;
     input.value = '';
     renderResults();
     dialog.showModal();
@@ -100,10 +101,12 @@ export function mountNavigation({ scrollToChapter, targets }) {
   input.addEventListener('input', renderResults);
   window.addEventListener('keydown', event => {
     if ((event.target instanceof Element && event.target.closest('input, textarea, select, [contenteditable="true"]')) || event.altKey) return;
+    if (document.querySelector('.shift-lab[open], .shift-player[open], .trailer:not([hidden])')) return;
     if (event.key.toLowerCase() === 'k') { event.preventDefault(); openIndex(); }
     if (event.key.toLowerCase() === 'g' && !event.metaKey && !event.ctrlKey && !dialog.open) { event.preventDefault(); toggleGrid(); }
   });
   const requested = chapters.findIndex(chapter => `#${chapter.id}` === location.hash);
   if (requested >= 0) requestAnimationFrame(() => scrollToChapter(requested));
   updateProgress();
+  mountLab(shell);
 }

@@ -12,6 +12,12 @@ export async function prepareDesktop(runtime) {
   const titles = [...document.querySelectorAll('.grid-entry__title')];
   const targets = titles;
   document.querySelector('.intro__title').tabIndex = -1;
+  const labInvite = document.createElement('button');
+  labInvite.className = 'shift-lab-invite';
+  labInvite.dataset.openLab = '';
+  labInvite.setAttribute('aria-haspopup', 'dialog');
+  labInvite.innerHTML = 'Play with the grid <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg>';
+  document.querySelector('.intro').append(labInvite);
   titles.forEach((title, index) => { title.id = chapters[index].id; title.tabIndex = -1; });
   const trigger = document.querySelector('[data-trailer]');
   trigger.tabIndex = 0;

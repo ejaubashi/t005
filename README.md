@@ -55,6 +55,14 @@ Full animation runs at widths of 1200 px and above with a fine pointer. Phones, 
 - The desktop trailer supports keyboard activation, a visible close button, focus containment, and focus restoration. The gallery uses native video controls.
 - Keyboard focus and all interface text retain the blue palette. The browser check rejects black or near-black text.
 
+## Composition lab
+
+Open **Lab** in the floating controls, press **L**, or use the playground entry on the introduction. Arrange three image tiles with pointer/touch dragging or arrow keys; placement snaps to the active grid. Adjust 4–8 columns, spacing, accent colors, and guide visibility. Remix and reset controls make it easy to try another layout.
+
+**Copy link** stores the composition in the URL hash, including tile positions, settings, and guide visibility. It requires no account or server; a selectable URL is supplied when clipboard access is unavailable. Shared states are validated before use. **Export SVG** downloads a standalone 1200×800 composition with all three photographs embedded, so it can render without the site. The export uses system sans-serif lettering.
+
+The lab supports keyboard controls and small screens. Its images load on demand. The floating controls use a translucent rounded treatment while retaining the cobalt, coral, and ice-blue identity.
+
 Hardware-accelerated WebGL is recommended for the interactive photographs. Headless validation needs a software WebGL renderer enabled.
 
 ## Browser validation
@@ -63,6 +71,9 @@ With Python Playwright and Chromium installed, start the dev server, then run:
 
 ```sh
 python -u scripts/smoke.py
+python -u scripts/lab-smoke.py
 ```
 
 Set `GRIDS_TEST_URL` to validate another server, for example the production preview. `CHROMIUM_PATH` can override the default system Chromium executable. The check covers loading, local media, chapter search, navigation and focus, reading progress, grid toggling, trailer controls, scroll sections, resizing, fresh touch-device visits, and the reduced-motion edition.
+
+The lab check also covers keyboard and pointer placement, grid controls, shared-state restoration, self-contained SVG downloads and rendering, reset, invalid links, and a 320 px mobile layout.

@@ -7,6 +7,7 @@ import './reference/style.css';
 import './style.css';
 
 import './features/features.css';
+import './features/lab.css';
 import { mountNavigation } from './features/navigation.js';
 
 const compact = matchMedia('(max-width: 1199px), (pointer: coarse)');
