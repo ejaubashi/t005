@@ -21,10 +21,8 @@ Credits shown by the reference:
 
 The local Vite wrapper, integration styles, documentation, and validation scripts were added for this project. The reference's Google Analytics integration is not included.
 
-## Current SHIFT exhibition
+## SHIFT identity
 
-The current application uses reference photographs `image-106.webp`, `image-118.webp`, and `image-669.webp`, and the local original trailer. It retains a visible link to Obys. The earlier reference runtime, modular wordmark overrides, and feature prototypes remain in the repository for provenance but are not imported by the exhibition.
+SHIFT adds original modular lettering, a cobalt blue, soft coral, and ice-blue palette, and locally served Sora and Manrope fonts. Runtime branding is applied by `scripts/brand-runtime.mjs` during Vite transformation; the downloaded reference file remains intact.
 
-The current art direction, exhibition text, Canvas sculpture, layout, dialogs, and interaction code were created for SHIFT. Its palette uses colored inks, warm paper, coral, and lilac.
-
-Sora, Manrope, and Cormorant Garamond were obtained from the corresponding Fontsource 5.3.0 packages. All three are distributed under the SIL Open Font License; license texts are retained next to the fonts in `public/fonts/`.
+Sora and Manrope were obtained from the corresponding Fontsource 5.3.0 packages. Both are distributed under the SIL Open Font License; license texts are retained next to the fonts in `public/fonts/`.

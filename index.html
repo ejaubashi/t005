@@ -3,18 +3,38 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#f5f0e8" />
-    <meta name="description" content="SHIFT — an independent visual exploration of form, feeling, and the art of seeing differently." />
-    <title>SHIFT — A Change in Perspective</title>
+    <meta name="theme-color" content="#1d4ed8" />
+    <meta name="description" content="SHIFT — an independent exploration of form, space, and motion. A new perspective on grids and composition." />
+    <title>SHIFT — Form, Space & Motion</title>
     <link rel="icon" href="/shift-icon.svg" type="image/svg+xml" />
     <link rel="preload" href="/fonts/sora-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/manrope-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/cormorant-garamond-latin-400-italic.woff2" as="font" type="font/woff2" crossorigin />
-    <style>html { background: #f5f0e8; color: #2d3bbd; } body { margin: 0; }</style>
+    <style>
+      html { background: #e9f4ff; }
+      body { margin: 0; color: #1d4ed8; }
+      .intro, .preloader { visibility: hidden; }
+      .is-up .intro, .is-up .preloader { visibility: visible; }
+    </style>
+    <script>
+      if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+      window.scrollTo(0, 0);
+    </script>
   </head>
   <body>
-    <div id="app"></div>
-    <noscript>SHIFT — A change in perspective. Enable JavaScript to explore the visual studies.</noscript>
+    <div class="preloader" data-preloader aria-hidden="true">
+      <div class="preloader__ground" data-ground></div>
+      <div class="preloader__bar" data-bar></div>
+    </div>
+    <main class="page">
+      <section class="intro" data-intro aria-label="SHIFT — Form, Space and Motion">
+        <p class="intro__series intro__mask-line" data-series><i>Independent design study<svg class="intro__cross" viewBox="0 0 4 4" aria-hidden="true" focusable="false"><path d="M0.0003 0.4924L0.4927 0L4.0002 3.5075L3.5078 3.9999Z"/><path d="M3.5075 0L3.9999 0.4924L0.4924 3.9999L0 3.5075Z"/></svg>SHIFT</i></p>
+        <div class="intro__about" data-about>
+          <span class="intro__mask-line"><i><a class="intro__link" data-season>SHIFT</a> — Form, space & motion.</i></span>
+          <span class="intro__mask-line"><i>A new perspective. Edition 001.</i></span>
+        </div>
+      </section>
+    </main>
+    <noscript>This interactive design experience requires JavaScript. Original project by Obys: https://grids03.obys.agency/.</noscript>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

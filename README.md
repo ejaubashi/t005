@@ -1,43 +1,79 @@
-# SHIFT — A Change in Perspective
+# SHIFT — Form, Space & Motion
 
-An independent digital exhibition built around expressive typography, a custom iridescent sculpture, and three asymmetric photographic studies. The identity keeps SHIFT and colored interface text, with cobalt, warm paper, coral, and lilac. Sora and Manrope are paired with Cormorant Garamond italic.
+A modern visual identity applied to the [Grids S03 experience by Obys](https://grids03.obys.agency/). SHIFT uses Sora display typography, Manrope body text and labels, cobalt blue lettering, soft coral, and an ice-blue background. A new modular SHIFT wordmark runs through the preloader, sidebar, and finale. The desktop grid layouts, scroll choreography, photographs, and trailer remain from the supplied reference.
 
-## Run locally
+The reference site's public browser runtime, styles, typography, and media are retained locally for fidelity. This is a runnable snapshot of the public experience, not the original unbundled development source. See [THIRD_PARTY.md](./THIRD_PARTY.md) for provenance.
 
-Node.js 20.19+ or 22.12+ is required; Node.js 24 was validated.
+## Development
+
+Requires Node.js 20.19+ or 22.12+; validated with Node.js 24.
 
 ```sh
+cd /workspace/t005
 npm ci
 npm run dev
 ```
 
-## Build and publish
+The application and media run locally without credentials or external services. Outbound course, social, and Obys links retain their original destinations. Google Analytics is omitted.
+
+## Production
 
 ```sh
 npm run build
 npm run preview
 ```
 
-For a subdirectory, use `PAGES_BASE_PATH=/t005/ npm run build`. Pushes to `main` deploy through `.github/workflows/pages.yml` to https://ejaubashi.github.io/t005/.
+By default the build runs at the server root. For a subdirectory, set `PAGES_BASE_PATH`, for example `PAGES_BASE_PATH=/t005/ npm run build`. The Vite integration adjusts the reference runtime's media paths without modifying the reference source. The local trailer accounts for approximately 30 MB of the build; it is loaded on demand.
 
-## Current experience
+## GitHub Pages
 
-- A hand-built 3D torus-knot sculpture with smooth, per-pixel WebGL shading and a Canvas 2D fallback. Its iridescent surface rotates subtly and responds to the pointer. The motion control pauses or resumes it.
-- Three image studies with sculptural crops, scroll reveals, poetic descriptions, and accessible closer-look dialogs.
-- A local original film, with native playback controls and pause-on-close behavior.
-- Responsive desktop and mobile compositions. Reduced-motion preferences stop automatic sculpture movement and disable transitions. Rendering also stops offscreen and in hidden tabs.
-- All interface text uses colored inks. No external services, credentials, or remote asset requests are needed.
+The workflow in `.github/workflows/pages.yml` builds and deploys pushes to `main`. In the repository's Settings → Pages, select **GitHub Actions** as the source. The project URL is `https://ejaubashi.github.io/t005/` once the deployment succeeds. The workflow can also be started manually from the Actions tab.
 
-`src/exhibition.js` defines the exhibition and dialogs, `src/sculpture.js` builds and animates the mesh, and `src/art.css` defines the art direction. The previous reference runtime and feature prototypes remain in the repository for history/provenance but are not imported into the current application. There is no playground or floating toolbar in the current experience.
+## Project layout
 
-The photographs and original film are retained from the Obys reference; attribution and font licenses are recorded in `THIRD_PARTY.md` and `public/fonts/`.
+- `index.html`: initial document, local font preload, and reload position reset.
+- `src/main.js`: Vite entry and runtime initialization.
+- `src/style.css`: local integration and keyboard focus styles.
+- `src/features/`: chapter metadata, searchable navigation, accessible trailer enhancements, gallery edition, and interface styles.
+- `scripts/brand-runtime.mjs`: checked build-time name and modular wordmark overrides; leaves the reference file intact.
+- `src/reference/runtime.js`: public reference runtime, including animation and rendering libraries.
+- `src/reference/style.css`: public reference styles.
+- `public/`: local photography, font, trailer, and icons.
+- `reference-assets.json`: media paths, sizes, and SHA-256 hashes.
 
-## Validation
+Keep local overrides outside `src/reference/` so the reference snapshot remains auditable. Larger customization would benefit from rewriting the relevant portions of the bundled runtime into separate source modules.
 
-With Python Playwright and system Chromium installed:
+## Viewport behavior
+
+Full animation runs at widths of 1200 px and above with a fine pointer. Phones, smaller screens, and reduced-motion users get an accessible gallery of all 18 chapters with local images, chapter navigation, and a native trailer player. The large animation runtime is not loaded in the gallery. Changing between those modes reloads the page to dispose of the previous renderer and scroll pins cleanly.
+
+## Interaction upgrades
+
+- Open **Index** (or press **K**) to search chapter titles and descriptions, then jump directly to a study. The URL hash can be shared or reloaded to reopen that chapter.
+- Toggle a composition grid with **Grid** or **G**. The button announces its current state.
+- Reading progress and a back-to-top control are available in both editions.
+- The desktop trailer supports keyboard activation, a visible close button, focus containment, and focus restoration. The gallery uses native video controls.
+- Keyboard focus and all interface text retain the blue palette. The browser check rejects black or near-black text.
+
+## Composition lab
+
+Open **Lab** in the floating controls, press **L**, or use the playground entry on the introduction. Arrange three image tiles with pointer/touch dragging or arrow keys; placement snaps to the active grid. Adjust 4–8 columns, spacing, accent colors, and guide visibility. Remix and reset controls make it easy to try another layout.
+
+**Copy link** stores the composition in the URL hash, including tile positions, settings, and guide visibility. It requires no account or server; a selectable URL is supplied when clipboard access is unavailable. Shared states are validated before use. **Export SVG** downloads a standalone 1200×800 composition with all three photographs embedded, so it can render without the site. The export uses system sans-serif lettering.
+
+The lab supports keyboard controls and small screens. Its images load on demand. The floating controls use a translucent rounded treatment while retaining the cobalt, coral, and ice-blue identity.
+
+Hardware-accelerated WebGL is recommended for the interactive photographs. Headless validation needs a software WebGL renderer enabled.
+
+## Browser validation
+
+With Python Playwright and Chromium installed, start the dev server, then run:
 
 ```sh
 python -u scripts/smoke.py
+python -u scripts/lab-smoke.py
 ```
 
-Set `GRIDS_TEST_URL` to test a production preview and `CHROMIUM_PATH` to use another Chromium executable. The check exercises actual sculpture rendering, pause/resume, study cycling, focus restoration, film playback, colored text, reduced motion, 390/320px touch layouts, and browser/HTTP errors. The old `scripts/lab-smoke.py` belongs to the previous prototype and does not apply to this exhibition.
+Set `GRIDS_TEST_URL` to validate another server, for example the production preview. `CHROMIUM_PATH` can override the default system Chromium executable. The check covers loading, local media, chapter search, navigation and focus, reading progress, grid toggling, trailer controls, scroll sections, resizing, fresh touch-device visits, and the reduced-motion edition.
+
+The lab check also covers keyboard and pointer placement, grid controls, shared-state restoration, self-contained SVG downloads and rendering, reset, invalid links, and a 320 px mobile layout.
